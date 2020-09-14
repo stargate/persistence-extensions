@@ -92,8 +92,6 @@ public class DsePersistence implements Persistence<Config, org.apache.cassandra.
         DatabaseDescriptor.daemonInitialization(true, config);
         cassandraDaemon = new CassandraDaemon(true);
 
-        StorageService.instance.valueFactory = new ValueFactory();
-
         // CassandraDaemon.activate() creates a thread that swallows exceptions that occur during startup. Use
         // an UnauthorizedExceptionHandler to check for failure.
         AtomicReference<Throwable> throwableFromMainThread = new AtomicReference<>();
@@ -551,20 +549,6 @@ public class DsePersistence implements Persistence<Config, org.apache.cassandra.
             }
 
             Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
-        }
-    }
-
-    private static class ValueFactory extends VersionedValue.VersionedValueFactory {
-        public ValueFactory()
-        {
-            super(StorageService.instance.getTokenMetadata().partitioner);
-        }
-
-        @Override
-        public VersionedValue releaseVersion()
-        {
-            // This is hack because there is no version that takes a string and VersionedValue's constructor is private.
-            return dsefsState(ProductVersion.getReleaseVersionString() + "-stargate");
         }
     }
 }
