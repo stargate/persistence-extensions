@@ -52,18 +52,15 @@ public class DefaultQueryInterceptor implements QueryInterceptor, IEndpointState
     }
 
     @Override
-    public boolean shouldInterceptQuery(CQLStatement statement,
-                                        QueryState state, QueryOptions options,
-                                        Map<String, ByteBuffer> customPayload, long queryStartNanoTime)
-    {
-        return isSystemLocalOrPeers(statement);
-    }
-
-    @Override
     public Single<Result> interceptQuery(QueryHandler handler,
                                          CQLStatement statement, QueryState state, QueryOptions options,
                                          Map<String, ByteBuffer> customPayload, long queryStartNanoTime)
     {
+        if (!isSystemLocalOrPeers(statement))
+        {
+            return null;
+        }
+
         org.apache.cassandra.service.QueryState internalState = Conversion.toInternal(state);
         org.apache.cassandra.cql3.QueryOptions internalOptions = Conversion.toInternal(options);
         return interceptSystemLocalOrPeers(statement, internalState, internalOptions, queryStartNanoTime);

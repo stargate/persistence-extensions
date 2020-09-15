@@ -20,10 +20,6 @@ public interface QueryInterceptor
 {
     void initialize();
 
-    boolean shouldInterceptQuery(CQLStatement statement,
-                                 QueryState state, QueryOptions options,
-                                 Map<String, ByteBuffer> customPayload, long queryStartNanoTime);
-
     Result interceptQuery(QueryHandler handler, CQLStatement statement,
                           QueryState state, QueryOptions options,
                           Map<String, ByteBuffer> customPayload, long queryStartNanoTime);

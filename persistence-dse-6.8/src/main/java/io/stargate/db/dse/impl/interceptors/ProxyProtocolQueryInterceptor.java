@@ -32,6 +32,8 @@ import io.stargate.db.Result;
 import io.stargate.db.dse.impl.Conversion;
 import io.stargate.db.dse.impl.StargateSystemKeyspace;
 
+import static io.stargate.db.dse.impl.StargateSystemKeyspace.isSystemLocalOrPeers;
+
 /**
  * A query interceptor that echos back the public IPs from the proxy protocol from `system.local`. The goal is to populate `system.peers`
  * with A-records from a provided DNS name.
@@ -44,25 +46,15 @@ public class ProxyProtocolQueryInterceptor implements QueryInterceptor
     }
 
     @Override
-    public boolean shouldInterceptQuery(CQLStatement statement,
-                                        QueryState state, QueryOptions options,
-                                        Map<String, ByteBuffer> customPayload, long queryStartNanoTime)
-    {
-        if (statement instanceof SelectStatement)
-        {
-            SelectStatement selectStatement = (SelectStatement) statement;
-            String tableName = selectStatement.table();
-            return selectStatement.keyspace().equals(SchemaConstants.SYSTEM_VIEWS_KEYSPACE_NAME) &&
-                    (tableName.equals(LocalNodeSystemView.NAME) || tableName.equals(PeersSystemView.NAME)) ;
-        }
-        return false;
-    }
-
-    @Override
     public Single<Result> interceptQuery(QueryHandler handler, CQLStatement statement,
                                          QueryState state, QueryOptions options,
                                          Map<String, ByteBuffer> customPayload, long queryStartNanoTime)
     {
+        if (!isSystemLocalOrPeers(statement))
+        {
+            return null;
+        }
+
         SelectStatement selectStatement = (SelectStatement) statement;
 
         org.apache.cassandra.cql3.QueryOptions internalOptions = Conversion.toInternal(options);

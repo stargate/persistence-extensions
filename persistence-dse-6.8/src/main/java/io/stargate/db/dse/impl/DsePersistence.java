@@ -26,7 +26,6 @@ import org.apache.cassandra.cql3.statements.ModificationStatement;
 import org.apache.cassandra.exceptions.InvalidRequestException;
 import org.apache.cassandra.gms.ApplicationState;
 import org.apache.cassandra.gms.Gossiper;
-import org.apache.cassandra.gms.VersionedValue;
 import org.apache.cassandra.schema.SchemaManager;
 import org.apache.cassandra.service.CassandraDaemon;
 import org.apache.cassandra.service.ClientState;
@@ -42,7 +41,6 @@ import org.apache.cassandra.utils.JVMStabilityInspector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.bdp.db.util.ProductVersion;
 import com.datastax.bdp.util.SchemaTool;
 import com.datastax.oss.driver.shaded.guava.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
@@ -513,10 +511,8 @@ public class DsePersistence implements Persistence<Config, org.apache.cassandra.
                                             Map<String, ByteBuffer> customPayload, long queryStartNanoTime,
                                             UUID tracingId)
     {
-        Single<Result> resp;
-        if (interceptor.shouldInterceptQuery(statement, state, options, customPayload, queryStartNanoTime))
-            resp = interceptor.interceptQuery(handler, statement, state, options, customPayload, queryStartNanoTime);
-        else
+        Single<Result> resp = interceptor.interceptQuery(handler, statement, state, options, customPayload, queryStartNanoTime);
+        if (resp == null)
         {
             org.apache.cassandra.service.QueryState internalState = Conversion.toInternal(state);
             org.apache.cassandra.cql3.QueryOptions internalOptions = Conversion.toInternal(options);
