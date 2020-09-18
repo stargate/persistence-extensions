@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.fail;
 
 import com.datastax.oss.driver.api.core.CqlIdentifier;
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.ProtocolVersion;
 import com.datastax.oss.driver.api.core.config.DefaultDriverOption;
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import com.datastax.oss.driver.api.core.config.ProgrammaticDriverConfigLoaderBuilder;
@@ -508,6 +509,11 @@ public class CQLTest extends BaseOsgiIntegrationTest {
   private static ProgrammaticDriverConfigLoaderBuilder getDriverConfigLoaderBuilder() {
     return DriverConfigLoader.programmaticBuilder()
         .withBoolean(DefaultDriverOption.METADATA_TOKEN_MAP_ENABLED, false)
+        .withString(
+            DefaultDriverOption.PROTOCOL_VERSION,
+            ProtocolVersion.V4
+                .name()) // FIXME: We shouldn't have to do this, but the java-driver is not
+                         // negotiating the protocol down properly.
         .withString(
             DefaultDriverOption.LOAD_BALANCING_POLICY_CLASS,
             DcInferringLoadBalancingPolicy.class.getName())
