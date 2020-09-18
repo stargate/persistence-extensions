@@ -513,7 +513,7 @@ public class CQLTest extends BaseOsgiIntegrationTest {
             DefaultDriverOption.PROTOCOL_VERSION,
             ProtocolVersion.V4
                 .name()) // FIXME: We shouldn't have to do this, but the java-driver is not
-                         // negotiating the protocol down properly.
+        // negotiating the protocol down properly.
         .withString(
             DefaultDriverOption.LOAD_BALANCING_POLICY_CLASS,
             DcInferringLoadBalancingPolicy.class.getName())
