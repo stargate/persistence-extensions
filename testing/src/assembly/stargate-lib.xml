@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+  <id>stargate-lib</id>
+  <formats>
+    <format>dir</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <dependencySets>
+    <dependencySet>
+      <unpack>false</unpack>
+      <scope>runtime</scope>
+      <excludes>
+        <exclude>org.apache.felix:org.apache.felix.framework</exclude>
+      </excludes>
+      <includes>
+        <include>io.stargate.starter:*</include>
+        <include>io.stargate.db:persistence-api</include>
+        <include>io.stargate.cql:cql</include>
+        <include>org.apache.felix:*</include>
+        <include>org.osgi:*</include>
+        <include>org.ow2.asm:*</include>
+        <include>org.codehaus.mojo:animal-sniffer-annotations</include>
+      </includes>
+    </dependencySet>
+  </dependencySets>
+</assembly>
