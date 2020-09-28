@@ -72,10 +72,9 @@ public class CassandraPersistence
    * live token owner doesn't become live within MigrationManager.MIGRATION_DELAY_IN_MS.
    */
   private static final int STARTUP_DELAY_MS =
-      Integer.parseInt(
-          System.getProperty(
-              "stargate.startup_delay_ms",
-              "180000")); // MigrationManager.MIGRATION_DELAY_IN_MS is private
+      Integer.getInteger(
+          "stargate.startup_delay_ms",
+          3 * 60000); // MigrationManager.MIGRATION_DELAY_IN_MS is private
 
   private DataStore root;
   private CassandraDaemon daemon;
