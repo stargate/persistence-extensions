@@ -22,24 +22,18 @@
     <dependency>
       <groupId>io.stargate.db</groupId>
       <artifactId>persistence-api</artifactId>
-      <version>0.0.11</version>
+      <version>0.0.11-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>io.stargate.db</groupId>
       <artifactId>persistence-common</artifactId>
-      <version>0.0.11</version>
+      <version>0.0.11-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>io.stargate.health</groupId>
-      <artifactId>health-checker</artifactId>
-      <version>0.0.9</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>io.stargate.core</groupId>
+      <artifactId>core</artifactId>
+      <version>0.0.11-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -213,7 +207,7 @@
               io.stargate.db.datastore.*,
               org.apache.cassandra.stargate,
               !com.codahale.metrics.graphite.*,
-              io.stargate.health.metrics.api,
+              io.stargate.core,
               com.codahale.metrics,
             ]]></Import-Package>
             <Export-Package>io.stargate.db.cassandra</Export-Package>
